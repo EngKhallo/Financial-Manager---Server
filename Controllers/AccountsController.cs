@@ -1,4 +1,5 @@
 using Income_Expense_Manager.Data;
+using Income_Expense_Manager.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Income_Expense_Manager.Controllers;
@@ -29,5 +30,15 @@ public class AccountsController : ControllerBase
         }
 
         return Ok(account);
+    }
+
+    [HttpPost]
+    public IActionResult Add([FromBody]Account account)
+    {
+
+        _context.Account.Add(account);
+        _context.SaveChanges();
+
+        return Created("", account);
     }
 }
