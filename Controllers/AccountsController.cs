@@ -33,12 +33,29 @@ public class AccountsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Add([FromBody]Account account)
+    public IActionResult Add([FromBody] Account account)
     {
 
         _context.Account.Add(account);
         _context.SaveChanges();
 
         return Created("", account);
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, [FromBody] Account account)
+    {
+        var targetAccount = _context.Account.Find(id);
+        if (targetAccount is null)
+        {
+            return BadRequest();
+        }
+
+        targetAccount.Name = account.Name;
+
+        _context.Account.Update(targetAccount);
+        _context.SaveChanges();
+
+        return NoContent();
     }
 }
