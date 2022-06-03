@@ -58,4 +58,20 @@ public class AccountsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        var account = _context.Account.Find(id);
+
+        if (account is null)
+        {
+            return BadRequest();
+        }
+
+        _context.Account.Remove(account);
+        _context.SaveChanges();
+
+        return NoContent();
+    }
 }
