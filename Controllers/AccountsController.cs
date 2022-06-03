@@ -18,4 +18,16 @@ public class AccountsController : ControllerBase
         var account = _context.Account.OrderByDescending(u => u.Id).ToList();
         return Ok(account);
     }
+
+    [HttpGet("{id}")]
+    public IActionResult GetSingle(int id)
+    {
+        var account = _context.Account.Find(id);
+        if (account is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(account);
+    }
 }
