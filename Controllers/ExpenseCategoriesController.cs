@@ -40,11 +40,27 @@ public class ExpenseCategoriesController : ControllerBase
         {
             return BadRequest();
         }
-         targetCategory.Type = category.Type;
+        targetCategory.Type = category.Type;
 
-         _context.ExpenseCategory.Update(targetCategory);
-         _context.SaveChanges();
+        _context.ExpenseCategory.Update(targetCategory);
+        _context.SaveChanges();
 
-         return Ok("Updates Successfully");
+        return Ok("Updated Successfully");
+    }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        var category = _context.ExpenseCategory.Find(id);
+
+        if (category is null)
+        {
+            return BadRequest();    
+        }
+
+        _context.ExpenseCategory.Remove(category);
+        _context.SaveChanges();
+
+        return Ok("Deleted");
     }
 }
