@@ -8,6 +8,7 @@ builder.Services.AddDbContext<IncomesDbContext>(config =>
 
 
 // Add services to the container.
+builder.Services.AddCors(config => config.AddPolicy("Default", policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -23,6 +24,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("Default"); 
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
