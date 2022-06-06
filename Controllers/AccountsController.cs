@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Income_Expense_Manager.Controllers;
 
-[Route("[controller]")]
+[Route("api/v1/[controller]")]
 public class AccountsController : ControllerBase
 {
     private readonly IncomesDbContext _context;
