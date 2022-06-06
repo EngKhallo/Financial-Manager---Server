@@ -1,5 +1,6 @@
 using Income_Expense_Manager.Data;
 using Income_Expense_Manager.Models;
+using Income_Expense_Manager.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Income_Expense_Manager.Controllers;
@@ -14,10 +15,13 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public Response<List<AccountsViewModel>> GetAll()
     {
-        var account = _context.Account.OrderByDescending(u => u.Id).ToList();
-        return Ok(account);
+        var account = _context.Account
+        .Select(x => new AccountsViewModel { Id = x.Id, Name = x.Name})
+        .OrderByDescending(u => u.Id).ToList();
+
+        return new Response<List<AccountsViewModel>>(account);
     }
 
     [HttpGet("{id}")]
@@ -56,7 +60,7 @@ public class AccountsController : ControllerBase
         _context.Account.Update(targetAccount);
         _context.SaveChanges();
 
-        return NoContent();
+        return Ok();
     }
 
     [HttpDelete("{id}")]
