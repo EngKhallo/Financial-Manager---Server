@@ -1,10 +1,11 @@
 using Income_Expense_Manager.Data;
 using Income_Expense_Manager.Models;
+using Income_Expense_Manager.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Income_Expense_Manager.Controllers;
 
-[Route("controller")]
+[Route("api/v1/[controller]")]
 public class IncomeCategoryController : ControllerBase
 {
     private readonly IncomesDbContext _context;
@@ -14,11 +15,13 @@ public class IncomeCategoryController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public Response<List<IncomeCategoryViewModel>> GetAll()
     {
-        var category = _context.IncomeCategory.OrderByDescending(c => c.Id).ToList();
+        var category = _context.IncomeCategory
+        .Select(x => new IncomeCategoryViewModel { Id = x.Id, Type = x.Type })
+        .OrderByDescending(c => c.Id).ToList();
 
-        return Ok(category);
+        return new Response<List<IncomeCategoryViewModel>>(category);
     }
 
     [HttpGet("{id}")]
@@ -38,7 +41,7 @@ public class IncomeCategoryController : ControllerBase
     {
         _context.IncomeCategory.Add(category);
         _context.SaveChanges();
-
+        
         return Created("", category);
     }
 
@@ -56,7 +59,7 @@ public class IncomeCategoryController : ControllerBase
         _context.IncomeCategory.Update(targetCategory);
         _context.SaveChanges();
 
-        return NoContent();
+        return Ok();
     }
 
     [HttpDelete("{id}")]
