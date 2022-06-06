@@ -31,4 +31,20 @@ public class ExpenseCategoriesController : ControllerBase
 
         return Created("", category);
     }
+
+    [HttpPut("{id}")]
+    public IActionResult Update(int id, [FromBody] ExpenseCategory category)
+    {
+        var targetCategory = _context.ExpenseCategory.Find(id);
+        if (targetCategory is null)
+        {
+            return BadRequest();
+        }
+         targetCategory.Type = category.Type;
+
+         _context.ExpenseCategory.Update(targetCategory);
+         _context.SaveChanges();
+
+         return Ok("Updates Successfully");
+    }
 }
