@@ -1,9 +1,10 @@
 using Income_Expense_Manager.Data;
 using Income_Expense_Manager.Models;
+using Income_Expense_Manager.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Income_Expense_Manager.Controllers;
-[Route("[controller]")]
+[Route("api/v1/[controller]")]
 public class ExpenseCategoriesController : ControllerBase
 {
     private readonly IncomesDbContext _context;
@@ -13,10 +14,13 @@ public class ExpenseCategoriesController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public Response<List<ExpenseCategoryViewModel>> GetAll()
     {
-        var category = _context.ExpenseCategory.ToList();
-        return Ok(category);
+        var _category = _context.ExpenseCategory
+        .Select(x => new ExpenseCategoryViewModel { Id = x.Id, Type = x.Type })
+        .OrderByDescending(c => c.Id).ToList();
+
+        return new Response<List<ExpenseCategoryViewModel>>(_category);
     }
 
     [HttpPost]
