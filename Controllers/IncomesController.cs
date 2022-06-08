@@ -2,7 +2,6 @@ using Income_Expense_Manager.Data;
 using Income_Expense_Manager.ViewModels;
 using Income_Expense_Manager.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Income_Expense_Manager.Controllers;
 
@@ -17,20 +16,12 @@ public class IncomesController : ControllerBase
     }
 
     [HttpGet]
-    public Response<List<IncomeViewModel>> GetAll()
+    public IActionResult GetAll()
     {
-         var income = _context.Income
-        .Select(x => new IncomeViewModel { Id= x.Id, IncomeName = x.IncomeName, IncomeCategoryId = x.IncomeCategoryId, AccountId = x.AccountId, Amount = x.Amount, CreatedAt= x.CreatedAt, Description = x.Description})
-        .OrderByDescending(c => c.Id).ToList();
+        var incomes = _context.Income.ToList();
 
-        return new Response<List<IncomeViewModel>>(income);
+        return Ok(incomes);
     }
-    // public IActionResult GetAll()
-    // {
-    //      var income = _context.Income.ToList();
-
-    //      return Ok(income);
-    // }
 
     [HttpPost]
     public IActionResult Add([FromBody] IncomeViewModel viewModel)
