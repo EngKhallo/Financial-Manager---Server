@@ -24,5 +24,22 @@ public class ExpensesController : ControllerBase
         return new Response<List<ExpenseViewModel>>(expenses);
     }
 
-    
+    [HttpPost]
+    public IActionResult Add([FromBody] ExpenseViewModel ViewModel)
+    {
+        var expense = new Expense
+        {
+            ExpenseName = ViewModel.ExpenseName,
+            ExpenseCategoryId = ViewModel.ExpenseCategoryId,
+            AccountId = ViewModel.AccountId,
+            Amount = ViewModel.Amount,
+            CreatedAt = DateTime.UtcNow,
+            Description = ViewModel.Description,
+        };
+
+        _context.Expense.Add(expense);
+        _context.SaveChanges();
+
+        return Created("", expense);
+    }
 }
