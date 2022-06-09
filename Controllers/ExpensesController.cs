@@ -18,9 +18,11 @@ public class ExpensesController : ControllerBase
     public Response<List<ExpenseViewModel>> GetAll()
     {
         var expenses = _context.Expense
-        .Select(x => new Expense { Id = x.Id, ExpenseName = x.ExpenseName, Amount = x.Amount, ExpenseCategoryId = x.ExpenseCategoryId, Description = x.Description, AccountId = x.AccountId, })
-        .OrderByDescending(c => c.Id).ToList();
-
+        .Select(e => new ExpenseViewModel { Id = e.Id, ExpenseName = e.ExpenseName, ExpenseCategoryId = e.ExpenseCategoryId, AccountId = e.AccountId, Amount = e.Amount, Description = e.Description })
+        .OrderByDescending(c => c.Id)
+        .ToList();
         return new Response<List<ExpenseViewModel>>(expenses);
     }
+
+    
 }
