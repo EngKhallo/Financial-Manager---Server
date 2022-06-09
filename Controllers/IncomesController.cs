@@ -16,16 +16,10 @@ public class IncomesController : ControllerBase
     }
 
     [HttpGet]
-    // public IActionResult GetAll()
-    // {
-    //     var incomes = _context.Income.ToList();
-
-    //     return Ok(incomes);
-    // }
-     public Response<List<IncomeViewModel>> GetAll()
+    public Response<List<IncomeViewModel>> GetAll()
     {
         var incomes = _context.Income
-        .Select(x => new Income { Id = x.Id, IncomeName = x.IncomeName, Amount = x.Amount, IncomeCategory = x.IncomeCategory, Description= x.Description, AccountId = x.AccountId,})
+        .Select(x => new IncomeViewModel {Id = x.Id, Amount = x.Amount, IncomeName = x.IncomeName, IncomeCategoryId = x.IncomeCategoryId, AccountId = x.AccountId, Description = x.Description})
         .OrderByDescending(c => c.Id).ToList();
 
         return new Response<List<IncomeViewModel>>(incomes);
