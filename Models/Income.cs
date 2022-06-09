@@ -11,6 +11,5 @@ namespace Income_Expense_Manager.Models
         public decimal Amount { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? Description { get; set; }
-
     }
 }
