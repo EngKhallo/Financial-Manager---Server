@@ -6,6 +6,7 @@ public class IncomeViewModel
     public int Id { get; set; }
     public string IncomeName { get; set; } = "";
     public int IncomeCategoryId { get; set; }
+    public string IncomeCategoryName { get; set; } = string.Empty;
     public int AccountId { get; set; }
     public decimal Amount { get; set; }
     public DateTime CreatedAt { get; set; }
