@@ -2,6 +2,7 @@ using Income_Expense_Manager.Data;
 using Income_Expense_Manager.Models;
 using Income_Expense_Manager.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Income_Expense_Manager.Controllers;
 
@@ -15,19 +16,19 @@ public class IncomeCategoryController : ControllerBase
     }
 
     [HttpGet]
-    public Response<List<IncomeCategoryViewModel>> GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        var category = _context.IncomeCategory
+        var category =await _context.IncomeCategory
         .Select(x => new IncomeCategoryViewModel { Id = x.Id, Type = x.Type })
-        .OrderByDescending(c => c.Id).ToList();
+        .OrderByDescending(c => c.Id).ToListAsync();
 
-        return new Response<List<IncomeCategoryViewModel>>(category);
+        return Ok(category);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetSingle(int id)
+    public async Task<IActionResult> GetSingle(int id)
     {
-        var category = _context.IncomeCategory.Find(id);
+        var category =await _context.IncomeCategory.FindAsync(id);
         if (category is null)
         {
             return NotFound();
@@ -37,10 +38,10 @@ public class IncomeCategoryController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Add([FromBody] IncomeCategory category)
+    public async Task<IActionResult> Add([FromBody] IncomeCategory category)
     {
-        _context.IncomeCategory.Add(category);
-        _context.SaveChanges();
+        await _context.IncomeCategory.AddAsync(category);
+        await _context.SaveChangesAsync();
         
         return Created("", category);
     }
