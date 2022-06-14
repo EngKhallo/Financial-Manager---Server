@@ -47,9 +47,9 @@ public class IncomeCategoryController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] IncomeCategory category)
+    public async Task<IActionResult> Update(int id, [FromBody] IncomeCategory category)
     {
-        var targetCategory = _context.IncomeCategory.Find(id);
+        var targetCategory =await _context.IncomeCategory.FindAsync(id);
         if (targetCategory is null)
         {
             return BadRequest();
@@ -58,15 +58,15 @@ public class IncomeCategoryController : ControllerBase
         targetCategory.Type = category.Type;
 
         _context.IncomeCategory.Update(targetCategory);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var category = _context.IncomeCategory.Find(id);
+        var category =await _context.IncomeCategory.FindAsync(id);
 
         if (category is null)
         {
@@ -74,7 +74,7 @@ public class IncomeCategoryController : ControllerBase
         }
 
         _context.IncomeCategory.Remove(category);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
