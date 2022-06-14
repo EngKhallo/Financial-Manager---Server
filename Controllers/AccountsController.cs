@@ -2,6 +2,7 @@ using Income_Expense_Manager.Data;
 using Income_Expense_Manager.Models;
 using Income_Expense_Manager.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Income_Expense_Manager.Controllers;
 
@@ -15,19 +16,19 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet]
-    public Response<List<AccountsViewModel>> GetAll()
+    public async Task<Response<List<AccountsViewModel>>> GetAll()
     {
-        var account = _context.Account
+        var account =await _context.Account
         .Select(x => new AccountsViewModel { Id = x.Id, Name = x.Name})
-        .OrderByDescending(u => u.Id).ToList();
+        .OrderByDescending(u => u.Id).ToListAsync();
 
         return new Response<List<AccountsViewModel>>(account);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetSingle(int id)
+    public async Task<IActionResult> GetSingle(int id)
     {
-        var account = _context.Account.Find(id);
+        var account =await _context.Account.FindAsync(id);
         if (account is null)
         {
             return NotFound();
@@ -37,19 +38,19 @@ public class AccountsController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Add([FromBody] Account account)
+    public async Task<IActionResult> Add([FromBody] Account account)
     {
 
-        _context.Account.Add(account);
-        _context.SaveChanges();
+        await _context.Account.AddAsync(account);
+        await _context.SaveChangesAsync();
 
         return Created("", account);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Update(int id, [FromBody] Account account)
+    public async Task<IActionResult> Update(int id, [FromBody] Account account)
     {
-        var targetAccount = _context.Account.Find(id);
+        var targetAccount =await _context.Account.FindAsync(id);
         if (targetAccount is null)
         {
             return BadRequest();
@@ -58,15 +59,15 @@ public class AccountsController : ControllerBase
         targetAccount.Name = account.Name;
 
         _context.Account.Update(targetAccount);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return Ok();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        var account = _context.Account.Find(id);
+        var account =await _context.Account.FindAsync(id);
 
         if (account is null)
         {
@@ -74,7 +75,7 @@ public class AccountsController : ControllerBase
         }
 
         _context.Account.Remove(account);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return NoContent();
     }
