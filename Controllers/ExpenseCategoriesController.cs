@@ -2,6 +2,7 @@ using Income_Expense_Manager.Data;
 using Income_Expense_Manager.Models;
 using Income_Expense_Manager.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Income_Expense_Manager.Controllers;
 [Route("api/v1/[controller]")]
@@ -14,17 +15,17 @@ public class ExpenseCategoriesController : ControllerBase
     }
 
     [HttpGet]
-    public Response<List<ExpenseCategoryViewModel>> GetAll()
+    public async Task<Response<List<ExpenseCategoryViewModel>>> GetAll()
     {
-        var _category = _context.ExpenseCategory
+        var _category =await _context.ExpenseCategory
         .Select(x => new ExpenseCategoryViewModel { Id = x.Id, Type = x.Type })
-        .OrderByDescending(c => c.Id).ToList();
+        .OrderByDescending(c => c.Id).ToListAsync();
 
         return new Response<List<ExpenseCategoryViewModel>>(_category);
     }
 
     [HttpPost]
-    public IActionResult Add([FromBody] ExpenseCategory category)
+    public async Task<IActionResult> Add([FromBody] ExpenseCategory category)
     {
         _context.ExpenseCategory.Add(category);
         _context.SaveChanges();
