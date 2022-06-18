@@ -7,7 +7,7 @@ namespace Income_Expense_Manager.Models
         public int IncomeCategoryId { get; set; }
         public IncomeCategory IncomeCategory { get; set; } = null!;
         public int AccountId { get; set; }
-        public Account? Account { get; set; }
+        public Account Account { get; set; } = null!;
         public decimal Amount { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? Description { get; set; }
