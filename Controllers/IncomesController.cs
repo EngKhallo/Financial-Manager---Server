@@ -21,7 +21,7 @@ public class IncomesController : ControllerBase
     {
         var incomes = _context.Income
         .Include(x => x.IncomeCategory)
-        .Select(x => new IncomeViewModel { Id = x.Id, Amount = x.Amount, IncomeName = x.IncomeName, IncomeCategoryId = x.IncomeCategoryId, IncomeCategoryName = x.IncomeCategory.Type, AccountId = x.AccountId, Description = x.Description })
+        .Select(x => new IncomeViewModel { Id = x.Id, Amount = x.Amount, IncomeName = x.IncomeName, IncomeCategoryId = x.IncomeCategoryId, IncomeCategoryName = x.IncomeCategory.Type, AccountName = x.Account.Name,AccountId = x.AccountId, Description = x.Description })
         .OrderByDescending(c => c.Id).ToList();
 
         return new Response<List<IncomeViewModel>>(incomes);
